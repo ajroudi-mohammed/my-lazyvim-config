@@ -14,4 +14,13 @@ M.base46 = {
 	-- },
 }
 
+M.plugins = "custom.plugins"
+
+-- M.nvdash = { load_on_startup = true }
+-- M.ui = {
+--       tabufline = {
+--          lazyload = false
+--      }
+--}
+
 return M

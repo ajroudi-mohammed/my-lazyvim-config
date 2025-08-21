@@ -1,0 +1,32 @@
+local null_ls = require("null-ls")
+
+local flutter_analyze = {
+  method = null_ls.methods.DIAGNOSTICS,
+  filetypes = { "dart" },
+  generator = null_ls.generator({
+    command = "flutter",
+    args = { "analyze", "--no-pub" },
+    to_stdin = false,
+    from_stderr = false,
+    format = "raw",
+    on_output = function(line, params)
+      local items = {}
+      for file, row, col, msg in string.gmatch(line, "([^:]+):(%d+):(%d+): (.+)") do
+        table.insert(items, {
+          row = tonumber(row),
+          col = tonumber(col),
+          message = msg,
+          severity = 1,
+          source = "flutter analyze",
+        })
+      end
+      return items
+    end,
+  }),
+}
+
+null_ls.setup({
+  sources = {
+    flutter_analyze,
+  },
+})
